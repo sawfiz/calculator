@@ -57,6 +57,7 @@ opEls.forEach((op) => {
         }
         a = +display;
         displayEl.innerText = display;
+        display = "0";
         animateDisplayBlink();
         operation = op.innerText;
         console.log("a:", a, "operation: ", operation);
@@ -78,7 +79,7 @@ deleteEl.addEventListener("click", () => {
     } else {
         display = display.substring(0, display.length - 1)
     }
-    displayEl.innerText = +display;
+    displayEl.innerText = display;
 })
 
 async function animateButtonPress(e) {
