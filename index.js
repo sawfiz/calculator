@@ -87,6 +87,9 @@ deleteEl.addEventListener("click", () => {
     if (display.length === 1) {
         display = "0"
     } else {
+        if (display[display.length-1] === '.') {
+            decimal = false;
+        }
         display = display.substring(0, display.length - 1)
     }
     displayEl.innerText = display;
