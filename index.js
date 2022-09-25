@@ -1,7 +1,6 @@
 const btnEls = Array.from(document.querySelectorAll(".btn"));
 const numEls = Array.from(document.querySelectorAll(".num"));
 const opEls = Array.from(document.querySelectorAll(".op"));
-const equalEl = document.querySelector("#equal");
 const displayEl = document.querySelector(".display");
 let display = "0";
 displayEl.innerText = display;
@@ -31,37 +30,34 @@ numEls.forEach((num) => {
 
 opEls.forEach((op) => {
     op.addEventListener("click", () => {
+        switch (operation) {
+            case "+":
+                b = +display;
+                display = +(a + b);
+                break;
+            case "-":
+                b = +display;
+                display = +(a - b);
+                break;
+            case "*":
+                b = +display;
+                display = +(a * b);
+                break;
+            case "/":
+                b = +display;
+                display = +(a / b);
+                break;
+            default:
+                a = +display;
+                break;
+        }
         a = +display;
+        displayEl.innerText = display;
         animateDisplayBlink();
         operation = op.innerText;
         console.log("a:", a, "operation: ", operation);
         newNum = true;
     });
-});
-
-equalEl.addEventListener("click", () => {
-    b = +display;
-    console.log("b: ", b);
-    switch (operation) {
-        case "+":
-            display = +(a + b);
-            break;
-        case "-":
-            display = +(a - b);
-            break;
-        case "*":
-            display = +(a * b);
-            break;
-        case "/":
-            display = +(a / b);
-            break;
-
-        default:
-            break;
-    }
-    displayEl.innerText = display;
-    a = display;
-    newNum = true;
 });
 
 async function animateButtonPress(e) {

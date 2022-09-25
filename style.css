@@ -56,8 +56,6 @@ body {
 
 .display.active {
     color: transparent;
-    /* display: none; */
-    /* color: #e8dfca; */
 }
 
 .btn {
