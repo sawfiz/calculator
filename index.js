@@ -11,6 +11,7 @@ let a = 0;
 let b = 0;
 let newNum = true;
 let operation = "";
+let decimal = false;
 
 btnEls.forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -24,7 +25,14 @@ numEls.forEach((num) => {
             display = num.innerText;
             newNum = false;
         } else {
-            display = display + num.innerText;
+            if (num.innerText === ".") {
+                if (decimal === false) {
+                    decimal = true;
+                    display = display + num.innerText;
+                }
+            } else {
+                display = display + num.innerText;
+            }
         }
         console.log("display: ", display);
         console.log(typeof(display))
@@ -58,6 +66,7 @@ opEls.forEach((op) => {
         a = +display;
         displayEl.innerText = display;
         display = "0";
+        decimal = false;
         animateDisplayBlink();
         operation = op.innerText;
         console.log("a:", a, "operation: ", operation);
@@ -71,6 +80,7 @@ clearEl.addEventListener("click", () => {
     newNum = true;
     display = "0";
     displayEl.innerText = display;
+    decimal = false;
 })
 
 deleteEl.addEventListener("click", () => {
