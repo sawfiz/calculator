@@ -2,19 +2,19 @@ const btnEls = Array.from(document.querySelectorAll(".btn"));
 const numEls = Array.from(document.querySelectorAll(".num"));
 const opEls = Array.from(document.querySelectorAll(".op"));
 const displayEl = document.querySelector(".display");
-const clearEl = document.querySelector("#clear")
-const deleteEl = document.querySelector("#delete")
+const clearEl = document.querySelector("#clear");
+const deleteEl = document.querySelector("#delete");
 
 let display = "0";
 displayEl.innerText = display;
 
 let a = undefined;
 let b = undefined;
-let input = undefined;
+let input = "";
 let newNum = true;
 let operation = "";
 let decimal = false;
-let state = "init"
+let state = "waitForA";
 
 btnEls.forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -34,24 +34,66 @@ numEls.forEach((num) => {
                     input = input + num.innerText;
                 }
             } else {
-                input= input + num.innerText;
+                input = input + num.innerText;
             }
         }
         console.log("input: ", input);
-        console.log(typeof(input))
+        console.log(typeof input);
         displayEl.innerText = input;
     });
 });
 
 opEls.forEach((op) => {
     op.addEventListener("click", () => {
-
+        switch (state) {
+            case "waitForA":
+                if (input !== "") {
+                    a = +input;
+                    if (op.innerText !== "=") {
+                        operation = op.innerText;
+                        input = "";
+                        newNum = true;
+                        state = "waitForB";
+                    }
+                }
+                animateDisplayBlink();
+                break;
+            case "waitForB":
+                if (input !== "") {
+                    b = +input;
+                    input = "";
+                    result = calculate();
+                    a = result;
+                    displayEl.innerText = result;
+                    state = "gotResult";
+                }
+                break;
+            case "gotResult":
+                if (op.innerText === "=") {
+                    result = calculate();
+                    a = result;
+                    displayEl.innerText = result;
+                } else {
+                    if (input === "") {
+                        state = "waitForB";
+                        operation = op.innerText;
+                    } else {
+                        a = +input;
+                        operation = op.innerText;
+                        input = ""
+                        b = undefined;
+                        state = "waitForB"
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        console.log(`state: ${state}  a: ${a}  b: ${b}  input: ${input}`);
     });
 });
 
-
 function calculate() {
-    // console.log(`a: ${a}  b: ${b}  display: ${display}`);
     switch (operation) {
         case "+":
             return a + b;
@@ -73,19 +115,19 @@ clearEl.addEventListener("click", () => {
     display = "0";
     displayEl.innerText = display;
     decimal = false;
-})
+});
 
 deleteEl.addEventListener("click", () => {
     if (input.length === 1) {
-        input = "0"
+        input = "0";
     } else {
-        if (input[input.length-1] === '.') {
+        if (input[input.length - 1] === ".") {
             decimal = false;
         }
-        input = input.substring(0, input.length - 1)
+        input = input.substring(0, input.length - 1);
     }
     displayEl.innerText = input;
-})
+});
 
 async function animateButtonPress(e) {
     e.target.classList.add("active");
@@ -102,38 +144,3 @@ async function animateDisplayBlink() {
 function delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
-
-// opEls.forEach((op) => {
-//     op.addEventListener("click", () => {
-//         if (a === undefined) {
-//             a = (input === undefined) ? undefined : +input;
-//             operation = op.innerText;
-//             input = undefined;
-//             animateDisplayBlink();
-//         } else {
-//             if (op.innerText !== "=") {
-//                 operation = op.innerText;
-//             }
-//             if (input === undefined) {
-//                 if (op.innerText === "=") {
-//                     display = calculate();
-//                     a = +display;
-//                 } else {
-//                     animateDisplayBlink();
-//                 }
-//             } else {
-//                 b = +input;
-//                 console.log(`a: ${a}  b: ${b}  input: ${input} display: ${display}`);
-//                 display = calculate();
-//                 a = +display;
-//                 displayEl.innerText = a;
-//                 input = undefined;
-//                 a = undefined;
-//                 b = undefined;
-//             }
-//         }
-//         decimal = false;
-//         console.log("a:", a, "operation: ", operation);
-//         newNum = true;
-//     });
-// });
