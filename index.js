@@ -11,7 +11,6 @@ displayEl.innerText = display;
 let a = undefined;
 let b = undefined;
 let input = "";
-let newNum = true;
 let operation = "";
 let decimal = false;
 let state = "waitForA";
@@ -24,21 +23,15 @@ btnEls.forEach((btn) => {
 
 numEls.forEach((num) => {
     num.addEventListener("click", () => {
-        if (newNum === true) {
-            input = num.innerText;
-            newNum = false;
-        } else {
-            if (num.innerText === ".") {
-                if (decimal === false) {
-                    decimal = true;
-                    input = input + num.innerText;
-                }
-            } else {
+        if (num.innerText === ".") {
+            if (decimal === false) {
+                decimal = true;
                 input = input + num.innerText;
             }
+        } else {
+            input = input + num.innerText;
         }
         console.log("input: ", input);
-        console.log(typeof input);
         displayEl.innerText = input;
     });
 });
@@ -125,10 +118,8 @@ clearEl.addEventListener("click", () => {
 });
 
 deleteEl.addEventListener("click", () => {
-    console.log(input);
-    
     if (input === "" || input.length === 1) {
-        input = ""
+        input = "";
         displayEl.innerText = "0";
     } else {
         if (input[input.length - 1] === ".") {
