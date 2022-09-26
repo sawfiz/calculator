@@ -67,22 +67,29 @@ opEls.forEach((op) => {
                     displayEl.innerText = result;
                     state = "gotResult";
                 }
+                if (op.innerText !== "=") {
+                    operation = op.innerText;
+                }
                 break;
             case "gotResult":
-                if (op.innerText === "=") {
-                    result = calculate();
-                    a = result;
-                    displayEl.innerText = result;
+                if (input !== "") {
+                    // Received a new number, record it as A, go wait for B
+                    a = +input;
+                    b = undefined;
+                    input = "";
+                    operation = op.innerText;
+                    state = "waitForB";
                 } else {
-                    if (input === "") {
+                    // Received only an operator
+                    if (op.innerText === "=") {
+                        // Received =, repeat last calculation, stay in this state
+                        result = calculate();
+                        a = result;
+                        displayEl.innerText = result;
+                    } else {
+                        // Received + - * /, use current result as A, and go wait for B
                         state = "waitForB";
                         operation = op.innerText;
-                    } else {
-                        a = +input;
-                        operation = op.innerText;
-                        input = ""
-                        b = undefined;
-                        state = "waitForB"
                     }
                 }
                 break;
@@ -118,15 +125,18 @@ clearEl.addEventListener("click", () => {
 });
 
 deleteEl.addEventListener("click", () => {
-    if (input.length === 1) {
-        input = "0";
+    console.log(input);
+    
+    if (input === "" || input.length === 1) {
+        input = ""
+        displayEl.innerText = "0";
     } else {
         if (input[input.length - 1] === ".") {
             decimal = false;
         }
         input = input.substring(0, input.length - 1);
+        displayEl.innerText = input;
     }
-    displayEl.innerText = input;
 });
 
 async function animateButtonPress(e) {
