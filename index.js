@@ -44,8 +44,7 @@ opEls.forEach((op) => {
                     a = +input;
                     if (op.innerText !== "=") {
                         operation = op.innerText;
-                        input = "";
-                        newNum = true;
+                        resetInput();
                         state = "waitForB";
                     }
                 }
@@ -54,7 +53,7 @@ opEls.forEach((op) => {
             case "waitForB":
                 if (input !== "") {
                     b = +input;
-                    input = "";
+                    resetInput(); 
                     result = calculate();
                     a = result;
                     displayEl.innerText = result;
@@ -69,7 +68,7 @@ opEls.forEach((op) => {
                     // Received a new number, record it as A, go wait for B
                     a = +input;
                     b = undefined;
-                    input = "";
+                    resetInput();
                     operation = op.innerText;
                     state = "waitForB";
                 } else {
@@ -92,6 +91,11 @@ opEls.forEach((op) => {
         console.log(`state: ${state}  a: ${a}  b: ${b}  input: ${input}`);
     });
 });
+
+function resetInput() {
+    input = "";
+    decimal = false;
+}
 
 function calculate() {
     switch (operation) {
