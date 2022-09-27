@@ -6,7 +6,7 @@ const clearEl = document.querySelector("#clear");
 const deleteEl = document.querySelector("#delete");
 
 let display = "0";
-displayEl.innerText = display;
+updateDisplay("0");
 
 let a = undefined; // Operand A
 let b = undefined; // Operand B
@@ -34,7 +34,7 @@ numEls.forEach((num) => {
             input = input + num.innerText;
         }
         console.log("input: ", input);
-        displayEl.innerText = input;
+        updateDisplay(input);
     });
 });
 
@@ -63,7 +63,7 @@ opEls.forEach((op) => {
                     resetInput();
                     result = calculate();
                     a = result;
-                    displayEl.innerText = result;
+                    updateDisplay(result.toString());
                     state = "gotResult";
                 }
                 if (op.innerText !== "=") {
@@ -89,7 +89,7 @@ opEls.forEach((op) => {
                         // Received =, repeat last calculation, stay in this state
                         result = calculate();
                         a = result;
-                        displayEl.innerText = result;
+                        updateDisplay(result.toString());
                     } else {
                         // Received + - * /, use current result as A, and go wait for B
                         state = "waitForB";
@@ -131,22 +131,46 @@ clearEl.addEventListener("click", () => {
     a = 0;
     b = 0;
     resetInput();
-    displayEl.innerText = display;
+    updateDisplay("0");
 });
 
 // The Delete button event listener
 deleteEl.addEventListener("click", () => {
     if (input === "" || input.length === 1) {
         resetInput();
-        displayEl.innerText = "0";
+        updateDisplay("0");
     } else {
         if (input[input.length - 1] === ".") {
             decimal = false;
         }
         input = input.substring(0, input.length - 1);
-        displayEl.innerText = input;
+        updateDisplay(input);
     }
 });
+
+
+function updateDisplay(string) {
+    let value = +string;
+    console.log(value);
+    
+    if (value > 999999999) {
+        displayEl.innerText = "Too Large"
+        return;
+    }
+    if (value < -99999999) {
+        displayEl.innerText = "Too Small"
+        return;
+    }
+    if ((value > 0) && (value < 0.000001)) {
+        displayEl.innerText = "0.00000000"
+        return;
+    }
+    if ((value < 0) && (value > -0.000001)) {
+        displayEl.innerText = "0.00000000"
+        return;
+    }
+    displayEl.innerText = string.substring(0, 10)
+}
 
 // Utility function to animate a button press
 async function animateButtonPress(e) {
