@@ -11,9 +11,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #3d4245;
+}
+
+main {
+    width: min(1000px, 90%);
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-image: url('https://images.unsplash.com/photo-1625225230517-7426c1be750c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80');
     background-size: cover;
     background-position: center center;
+    border-radius: 5%;
 }
 
 .calculator {
@@ -22,7 +32,6 @@ body {
     grid-template-rows: auto auto auto auto auto auto auto auto;
     padding: 30px 20px 20px 20px;
     gap: 10px;
-    /* background-color: #4b5d67; */
     background-color: #3c4245;
     border-radius: 10px;
     border: 2px solid #000;
