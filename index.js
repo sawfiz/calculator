@@ -46,9 +46,9 @@ function calculate() {
     case '-':
       return a - b;
     case '*':
-      return a * b;
+      return Math.round(a * b * 10) / 10;
     case '/':
-      return a / b;
+      return Math.round((a / b) * 10) / 10;
     default:
       return null;
   }
@@ -101,7 +101,7 @@ numEls.forEach((num) => {
     } else {
       input += num.innerText;
     }
-    console.log('input: ', input);
+    // console.log('input: ', input);
     updateDisplay(input);
   });
 });
@@ -109,9 +109,9 @@ numEls.forEach((num) => {
 // Get operand input from keypad
 opEls.forEach((op) => {
   op.addEventListener('click', () => {
-    console.log(
-      `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
-    );
+    // console.log(
+    //   `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
+    // );
     animateDisplayBlink();
     // State machine of the calculator
     switch (state) {
@@ -149,9 +149,9 @@ opEls.forEach((op) => {
           break;
         }
 
-        console.log(
-          `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
-        );
+        // console.log(
+        //   `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
+        // );
         // Received an operator and there is an input, calculate
         if (input !== '') {
           b = +input;
@@ -201,7 +201,7 @@ opEls.forEach((op) => {
       default:
         break;
     }
-    console.log(`state: ${state}  a: ${a}  b: ${b}  input: ${input}`);
+    // console.log(`state: ${state}  a: ${a}  b: ${b}  input: ${input}`);
   });
 });
 
