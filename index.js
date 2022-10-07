@@ -7,7 +7,7 @@ const deleteEl = document.querySelector('#delete');
 
 let a; // Operand A
 let b; // Operand B
-let input; // Keypad input
+let input = ''; // Keypad input
 let operation; // Operator
 let decimal = false; // Flag for indicating if decimal point has been used in a number
 let state = 'waitForA'; // State indicator for the state machine
@@ -93,11 +93,15 @@ numEls.forEach((num) => {
       if (decimal === false) {
         decimal = true;
         input = input ? input + num.innerText : '0' + num.innerText;
+      } else {
+        animateDisplayBlink();
       }
+    } else if (input === '0' || input === undefined) {
+      input = num.innerText;
     } else {
-      input = input === '0' ? num.innerText : input + num.innerText;
+      input += num.innerText;
     }
-    // console.log('input: ', input);
+    console.log('input: ', input);
     updateDisplay(input);
   });
 });
@@ -105,68 +109,99 @@ numEls.forEach((num) => {
 // Get operand input from keypad
 opEls.forEach((op) => {
   op.addEventListener('click', () => {
+    console.log(
+      `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
+    );
     animateDisplayBlink();
     // State machine of the calculator
     switch (state) {
       // waitForA, wait for a valid Operand A to be entered
       case 'waitForA':
+        // Recived an operator, but there is no input, stay in waiForA
+        if (input === '') {
+          animateDisplayBlink();
+          state = 'waitForA';
+          break;
+        }
         if (input !== '') {
-          a = +input;
-          if (op.innerText !== '=') {
+          // Received an operator, and there is an input
+          if (op.innerText === '=') {
+            // The operator is '=', stay in waitForA
+            animateDisplayBlink();
+            state = 'waitForA';
+            break;
+          } else {
+            // The operator is one of '+-*/', register A and op, move to waitForB
+            a = +input;
             operation = op.innerText;
             resetInput();
             state = 'waitForB';
           }
         }
-        animateDisplayBlink();
         break;
 
       // waitForB, already received a valid Operand A and an operator, wait for a valid operand B
       case 'waitForB':
+        // Recived an operator, but there is no input, stay in waiForA
+        if (input === '') {
+          operation = op.innerText;
+          animateDisplayBlink();
+          break;
+        }
+
+        console.log(
+          `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
+        );
+        // Received an operator and there is an input, calculate
         if (input !== '') {
           b = +input;
           resetInput();
           result = calculate();
           a = result;
           updateDisplay(result.toString());
-          state = 'gotResult';
-        }
-        if (op.innerText !== '=') {
-          operation = op.innerText;
+          if (op.innerText === '=') {
+            state = 'gotResult';
+            break;
+          } else {
+            operation = op.innerText;
+            state = 'waitForB';
+          }
         }
         break;
 
-      // gotResult, got a valid calculation result.  Thress things can happen here:
-      // 1. a new number is entered with an new operator, this should be treated as Operand A
-      // 2. a "=" received, this should result a repeat of last calculation,
-      //    with the last result as new Operand A
-      // 3. a "+ - * /" received, the last result should become the new Operand A,
-      //    and go wait for B for calculation
       case 'gotResult':
-        if (input !== '') {
-          // Received a new number, record it as A, go wait for B
-          a = +input;
-          b = undefined;
-          resetInput();
+        if (op.innerText === '=') {
+          // Received a '='
+          if (input === '') {
+            // No input, repeat last calculation, stay in this state
+            result = calculate();
+            a = result;
+            updateDisplay(result.toString());
+            break;
+          } else {
+            // There is an input, go to waitForA for user to complete the input
+            state = 'waitForA';
+            break;
+          }
+        } else if (input === '') {
+          // Recived '+-*/'
+          // Got no input, register the operator, use current result as A, go to waitForB
           operation = op.innerText;
           state = 'waitForB';
-        } else if (op.innerText === '=') {
-          // Received only an operator
-          // Received =, repeat last calculation, stay in this state
-          result = calculate();
-          a = result;
-          updateDisplay(result.toString());
+          break;
         } else {
-          // Received + - * /, use current result as A, and go wait for B
-          state = 'waitForB';
+          // Got an input, register as A, register the operator, go to waitForB
+          a = +input;
           operation = op.innerText;
+          resetInput();
+          state = 'waitForB';
         }
-
         break;
+
       default:
         break;
     }
-    // console.log(`state: ${state}  a: ${a}  b: ${b}  input: ${input}`);
+    console.log(`state: ${state}  a: ${a}  b: ${b}  input: ${input}`);
   });
 });
 
