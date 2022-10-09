@@ -18,12 +18,13 @@ function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-// Utility function to animate a button press
-async function animateButtonPress(e) {
-  e.target.classList.add('active');
-  await delay(100);
-  e.target.classList.remove('active');
-}
+// this is no longer needed as I use CSS for the button press tranistion now
+// // Utility function to animate a button press
+// async function animateButtonPress(e) {
+//   e.target.classList.add('active');
+//   await delay(100);
+//   e.target.classList.remove('active');
+// }
 
 // Utility function to animate a display blink
 async function animateDisplayBlink() {
@@ -79,12 +80,13 @@ function updateDisplay(string) {
 // Start of the main program
 updateDisplay('0');
 
+// this is no longer needed as I use CSS for the button press tranistion now
 // For each button, when click, animate a button press
-btnEls.forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    animateButtonPress(e);
-  });
-});
+// btnEls.forEach((btn) => {
+//   btn.addEventListener('click', (e) => {
+//     animateButtonPress(e);
+//   });
+// });
 
 // Getting number inputs from keypad
 numEls.forEach((num) => {

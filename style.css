@@ -75,6 +75,7 @@ main {
     border-radius: 5px;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
     background: #5f6769;
+    transition: linear 50;
 }
 
 #clear {
@@ -91,7 +92,7 @@ main {
     cursor: pointer;
 }
 
-.btn.active {
+.btn:active {
     transform: translateY(5%);
 }
 
