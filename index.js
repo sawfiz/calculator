@@ -46,9 +46,9 @@ function calculate() {
     case '-':
       return a - b;
     case '*':
-      return a * b;
+      return Math.round(a * b * 100000000) / 100000000;
     case '/':
-      return a / b;
+      return Math.round(a / b * 100000000) / 100000000;
     default:
       return null;
   }
