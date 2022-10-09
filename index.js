@@ -46,9 +46,9 @@ function calculate() {
     case '-':
       return a - b;
     case '*':
-      return Math.round(a * b * 10) / 10;
+      return a * b;
     case '/':
-      return Math.round((a / b) * 10) / 10;
+      return a / b;
     default:
       return null;
   }
