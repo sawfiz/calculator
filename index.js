@@ -219,20 +219,28 @@ const core = (() => {
     resetInput();
     display.updateDisplay('0');
   }
+  
+  function processMinus() {
+    input = (+input * (-1)).toString();
+    display.updateDisplay(input);
+  }
+
 
   return {
     processNum,
     processOp,
     processClear,
     processDel,
+    processMinus,
   };
 })();
 
 const clickHandler = (() => {
   const numEls = Array.from(document.querySelectorAll('.num'));
   const opEls = Array.from(document.querySelectorAll('.op'));
-  const clearEl = document.querySelector('#clear');
-  const deleteEl = document.querySelector('#delete');
+  const clearEl = document.getElementById('clear');
+  const deleteEl = document.getElementById('delete');
+  const minusEl = document.getElementById('plus-minus');
 
   // Getting number inputs from keypad
   numEls.forEach((num) => {
@@ -257,4 +265,7 @@ const clickHandler = (() => {
   deleteEl.addEventListener('click', () => {
     core.processDel();
   });
+
+  // The plus/minus button event listener
+  minusEl.addEventListener('click', () => core.processMinus());
 })();
