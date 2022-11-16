@@ -1,44 +1,4 @@
-const display = (() => {
-  const displayEl = document.querySelector('.display');
-
-  // Utility function to create a delay
-  function delay(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
-
-  // Utility function to animate a display blink to indicate a key's been pressed
-  async function animateDisplayBlink() {
-    displayEl.classList.add('active');
-    await delay(100);
-    displayEl.classList.remove('active');
-  }
-
-  function updateDisplay(string) {
-    const value = +string;
-
-    // Limit number to display within 10 digits
-    if (value > 9999999999) {
-      displayEl.innerText = 'Too Large';
-      return;
-    }
-    if (value < -999999999) {
-      displayEl.innerText = 'Too Small';
-      return;
-    }
-    if (value > 0 && value < 0.000001) {
-      displayEl.innerText = '0.00000000';
-      return;
-    }
-    if (value < 0 && value > -0.000001) {
-      displayEl.innerText = '0.00000000';
-      return;
-    }
-    displayEl.innerText = string.substring(0, 10);
-  }
-
-  return { updateDisplay, animateDisplayBlink };
-})();
-display.updateDisplay('0');
+import display from './display';
 
 const core = (() => {
   let a; // Operand A
@@ -219,12 +179,11 @@ const core = (() => {
     resetInput();
     display.updateDisplay('0');
   }
-  
+
   function processMinus() {
-    input = (+input * (-1)).toString();
+    input = (+input * -1).toString();
     display.updateDisplay(input);
   }
-
 
   return {
     processNum,
@@ -235,37 +194,4 @@ const core = (() => {
   };
 })();
 
-const clickHandler = (() => {
-  const numEls = Array.from(document.querySelectorAll('.num'));
-  const opEls = Array.from(document.querySelectorAll('.op'));
-  const clearEl = document.getElementById('clear');
-  const deleteEl = document.getElementById('delete');
-  const minusEl = document.getElementById('plus-minus');
-
-  // Getting number inputs from keypad
-  numEls.forEach((num) => {
-    num.addEventListener('click', () => {
-      core.processNum(num.innerText);
-    });
-  });
-
-  // Get operand input from keypad
-  opEls.forEach((op) => {
-    op.addEventListener('click', () => {
-      core.processOp(op);
-    });
-  });
-
-  // The Clear button event listener
-  clearEl.addEventListener('click', () => {
-    core.processClear();
-  });
-
-  // The Delete button event listener
-  deleteEl.addEventListener('click', () => {
-    core.processDel();
-  });
-
-  // The plus/minus button event listener
-  minusEl.addEventListener('click', () => core.processMinus());
-})();
+export default core;

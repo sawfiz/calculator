@@ -5,6 +5,7 @@
     - [HTML](#html)
     - [CSS](#css)
     - [JS](#js)
+      - [Revisit in 2022-11](#revisit-in-2022-11)
   - [To do](#to-do)
   - [Resources](#resources)
   - [Live site](#live-site)
@@ -35,10 +36,19 @@
     ```
 - Then use `await dalay(100)` in an `async function someFunction() { ... }`
 
+#### Revisit in 2022-11
+- Modularize code into 3 objects:
+  - clickHandler
+  - display
+  - core
+- Add the +/- button
+- Dispkay ÷ and ᳵ on buttons and convert them to / and * in the js code for calculations
+- Use webpack 
+
 
 ## To do
 - How to add a favicon
-- Make decimal calculations appear correct
+- There may still be bugs in the calculations.  But the focus during the 2022-11 revisit is to modularize the code.
 
 ## Resources
 
