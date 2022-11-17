@@ -1,4 +1,5 @@
 import core from './core';
+import display from './display';
 
 const clickHandler = (() => {
   const numEls = Array.from(document.querySelectorAll('.num'));
@@ -10,29 +11,39 @@ const clickHandler = (() => {
   // Getting number inputs from keypad
   numEls.forEach((num) => {
     num.addEventListener('click', () => {
-      core.processNum(num.innerText);
+      display.animateDisplayBlink();
+      display.updateDisplay(core.processNum(num.innerText));
     });
   });
 
   // Get operand input from keypad
   opEls.forEach((op) => {
     op.addEventListener('click', () => {
-      core.processOp(op);
+      display.animateDisplayBlink();
+      const result = core.processOp(op);
+      // Only update display if there's a calculation result
+      if (result !== undefined) {
+        display.updateDisplay(result);
+      }
     });
   });
 
   // The Clear button event listener
   clearEl.addEventListener('click', () => {
     core.processClear();
+    display.updateDisplay('0');
   });
 
   // The Delete button event listener
   deleteEl.addEventListener('click', () => {
-    core.processDel();
+    display.updateDisplay(core.processDel());
   });
 
   // The plus/minus button event listener
-  minusEl.addEventListener('click', () => core.processMinus());
+  minusEl.addEventListener('click', () => {
+    display.animateDisplayBlink();
+    display.updateDisplay(core.processMinus());
+  });
 })();
 
 export default clickHandler;

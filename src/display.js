@@ -3,6 +3,7 @@ const display = (() => {
 
   // Utility function to create a delay
   function delay(time) {
+    // eslint-disable-next-line no-promise-executor-return
     return new Promise((resolve) => setTimeout(resolve, time));
   }
 
@@ -14,6 +15,11 @@ const display = (() => {
   }
 
   function updateDisplay(string) {
+    if (string === '') {
+      displayEl.innerText = '0';
+      return;
+    }
+
     const value = +string;
 
     // Limit number to display within 10 digits

@@ -1,5 +1,3 @@
-import display from './display';
-
 const core = (() => {
   let a; // Operand A
   let b; // Operand B
@@ -42,8 +40,8 @@ const core = (() => {
   }
 
   function processOp(op) {
-    display.animateDisplayBlink();
     console.log(
+      // eslint-disable-next-line comma-dangle
       `Got operator: ${op.innerText} state: ${state}  a: ${a}  b: ${b}  input: ${input}`
     );
 
@@ -53,7 +51,6 @@ const core = (() => {
       case 'waitForA':
         // Recived an operator, but there is no input, stay in waiForA
         if (input === '') {
-          display.animateDisplayBlink();
           state = 'waitForA';
           break;
         }
@@ -61,7 +58,6 @@ const core = (() => {
           // Received an operator, and there is an input
           if (op.innerText === '=') {
             // The operator is '=', stay in waitForA
-            display.animateDisplayBlink();
             state = 'waitForA';
             break;
           } else {
@@ -79,23 +75,22 @@ const core = (() => {
         // Recived an operator, but there is no input, stay in waiForA
         if (input === '') {
           convertOp(op);
-          display.animateDisplayBlink();
           break;
         }
         // Received an operator and there is an input, calculate
         if (input !== '') {
           b = +input;
           result = calculate();
-          display.updateDisplay(result.toString());
           resetInput();
           a = result;
           if (op.innerText === '=') {
             state = 'gotResult';
-            break;
           } else {
             convertOp(op);
             state = 'waitForB';
           }
+          console.log(result);
+          return result.toString();
         }
         break;
 
@@ -106,7 +101,8 @@ const core = (() => {
             // No input, repeat last calculation, stay in this state
             result = calculate();
             a = result;
-            display.updateDisplay(result.toString());
+            console.log(result);
+            return result.toString();
             break;
           } else {
             // There is an input, go to waitForA for user to complete the input
@@ -144,7 +140,6 @@ const core = (() => {
         input = input ? input + number : '0' + number;
       } else {
         // Ignore if the number already had a decimal point
-        display.animateDisplayBlink();
       }
     } else if (input === '0' || input === undefined) {
       // Ignore 0 if it is the first char of a number
@@ -152,15 +147,14 @@ const core = (() => {
     } else {
       input += number;
     }
-    console.log('input: ', input);
-    display.updateDisplay(input);
+    // console.log('input: ', input);
+    return input;
   }
 
   function processDel() {
     // Special case: there is nothing to delete
     if (input === '' || input.length === 1) {
       resetInput();
-      display.updateDisplay('0');
     } else {
       // Normal case: there is something to delete
       // Special case: last character is a decimal point
@@ -169,20 +163,19 @@ const core = (() => {
       }
       // Delete the last character of the input
       input = input.substring(0, input.length - 1);
-      display.updateDisplay(input);
     }
+    return input;
   }
 
   function processClear() {
     a = 0;
     b = 0;
     resetInput();
-    display.updateDisplay('0');
   }
 
   function processMinus() {
     input = (+input * -1).toString();
-    display.updateDisplay(input);
+    return input;
   }
 
   return {
