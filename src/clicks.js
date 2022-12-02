@@ -2,8 +2,8 @@ import core from './core';
 import display from './display';
 
 const clickHandler = (() => {
-  const numEls = Array.from(document.querySelectorAll('.num'));
-  const opEls = Array.from(document.querySelectorAll('.op'));
+  const numEls = document.querySelectorAll('.num');
+  const opEls = document.querySelectorAll('.op');
   const clearEl = document.getElementById('clear');
   const deleteEl = document.getElementById('delete');
   const minusEl = document.getElementById('plus-minus');
